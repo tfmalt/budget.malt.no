@@ -11,7 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import Chart from "react-google-charts";
-import { version } from "../package.json";
+import packageInfo from "../package.json";
 import styles from "../styles/Home.module.scss";
 import { CallReceived } from "@material-ui/icons";
 
@@ -123,7 +123,7 @@ const Home: NextPage = () => {
         </section>
       </main>
       <footer className={styles.footer}>
-        budget sankey - initial version - v{version}
+        budget sankey - initial version - v{packageInfo.version}
       </footer>
     </div>
   );
