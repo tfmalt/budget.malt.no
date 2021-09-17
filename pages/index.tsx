@@ -13,7 +13,7 @@ import Select from "@material-ui/core/Select";
 import Chart from "react-google-charts";
 import packageInfo from "../package.json";
 import styles from "../styles/Home.module.scss";
-import { CallReceived } from "@material-ui/icons";
+import { linkColors, nodeColors } from "../lib/colors";
 
 const Home: NextPage = () => {
   const [year, setYear] = React.useState("");
@@ -42,6 +42,19 @@ const Home: NextPage = () => {
     console.log("Got month event: ", event.target.value, event);
     setMonth(event.target.value as string);
   };
+  debugger;
+  const chartData = [
+    ["From", "To", "Kr ", { type: "string", role: "tooltip" }],
+    ["A", "X", 5, "A-X"],
+    ["A", "Y", 7, "A-Y"],
+    ["A", "Z", 6, "A-Z"],
+    ["B", "X", 2, "B-X"],
+    ["B", "Y", 9, "B-Y"],
+    ["B", "Z", 4, "B-Z"],
+    ["X", "D", 3, "X-D"],
+    ["Y", "E", 1, "Y-E"],
+    ["Z", "F", 5, "Z-F"],
+  ];
 
   return (
     <div className={styles.container}>
@@ -110,15 +123,28 @@ const Home: NextPage = () => {
             width={"100%"}
             height={"calc(100vh - 216px"}
             loader={<div>Loading Chart</div>}
-            data={[
-              ["From", "To", "Weight"],
-              ["A", "X", 5],
-              ["A", "Y", 7],
-              ["A", "Z", 6],
-              ["B", "X", 2],
-              ["B", "Y", 9],
-              ["B", "Z", 4],
-            ]}
+            options={{
+              sankey: {
+                iterations: 64,
+                link: { colors: linkColors[200], colorMode: "gradient" },
+                node: {
+                  colors: nodeColors[800],
+                  width: 40,
+                  label: { color: "#444", fontName: "Roboto", fontSize: 14 },
+                },
+              },
+              tooltip: {
+                isHtml: true,
+                textStyle: {
+                  fontSize: 12,
+                },
+              },
+              animation: {
+                duration: 1000,
+                easing: "out",
+              },
+            }}
+            data={chartData}
           />
         </section>
       </main>
