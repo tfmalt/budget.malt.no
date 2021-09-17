@@ -42,7 +42,7 @@ const Home: NextPage = () => {
     console.log("Got month event: ", event.target.value, event);
     setMonth(event.target.value as string);
   };
-  debugger;
+
   const chartData = [
     ["From", "To", "Kr ", { type: "string", role: "tooltip" }],
     ["A", "X", 5, "A-X"],
@@ -59,9 +59,29 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="A test project to learn next.js" />
+        <title>SD60 - Money Streams</title>
+        <meta
+          name="description"
+          content="Visualize money spent - and learn next.js"
+        />
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
       </Head>
       <header className={styles.header}>
         <AppBar position="static">
