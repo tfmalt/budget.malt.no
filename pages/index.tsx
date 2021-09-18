@@ -1,15 +1,14 @@
 import type { NextPage } from 'next';
 import React from 'react';
-import Head from 'next/head';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import packageInfo from '../package.json';
 import styles from '../styles/Home.module.scss';
 import BudgetSankey from '../lib/components/BudgetSankey/BudgetSankey';
@@ -17,8 +16,8 @@ import BudgetSankey from '../lib/components/BudgetSankey/BudgetSankey';
 const Home: NextPage = () => {
   const now = new Date();
 
-  const [year, setYear] = React.useState(now.getFullYear());
-  const [month, setMonth] = React.useState(now.getMonth());
+  const [year, setYear] = React.useState(now.getFullYear().toString());
+  const [month, setMonth] = React.useState(now.getMonth().toString());
 
   const years = [2018, 2019, 2020, 2021];
   const months = [
@@ -36,25 +35,17 @@ const Home: NextPage = () => {
     'December',
   ];
 
-  const handleYearChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleYearChange = (event: SelectChangeEvent) => {
     console.log('Got year event: ', event.target.value, event);
-    setYear(event.target.value as number);
+    setYear(event.target.value);
   };
-  const handleMonthChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleMonthChange = (event: SelectChangeEvent) => {
     console.log('Got month event: ', event.target.value, event);
-    setMonth(event.target.value as number);
+    setMonth(event.target.value);
   };
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>SD60 - Money Streams</title>
-        <meta name="description" content="Visualize money spent - and learn next.js" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      </Head>
       <header className={styles.header}>
         <AppBar position="static">
           <Toolbar>
@@ -68,8 +59,9 @@ const Home: NextPage = () => {
         </AppBar>
       </header>
       <main className={styles.main}>
+        <BudgetSankey month={month} year={year} />
         <section id="year-month-select" className={styles.formsection}>
-          <FormControl className={styles.formControl}>
+          <FormControl>
             <InputLabel id="budget-year-label">Year</InputLabel>
             <Select
               variant="filled"
@@ -104,7 +96,6 @@ const Home: NextPage = () => {
             </Select>
           </FormControl>
         </section>
-        <BudgetSankey month={month} year={year} />
       </main>
       <footer className={styles.footer}>budget sankey - initial version - v{packageInfo.version}</footer>
     </div>
