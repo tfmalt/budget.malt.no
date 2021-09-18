@@ -1,47 +1,47 @@
 import React from 'react';
 import Chart from 'react-google-charts';
+import { Typography } from '@mui/material';
 import { linkColors, nodeColors } from '../../colors';
+import type { BudgetProps, BudgetStreamRow, BudgetStream, BudgetChartData } from './BudgetSankey.types';
+
 import styles from '../../../styles/BudgetSankey.module.scss';
 
-type BudgetProps = {
-  month: number;
-  year: number;
-};
-
 const BudgetSankey = ({ month, year }: BudgetProps) => {
+  const [chartData, setChartData] = React.useState<BudgetChartData>([
+    ['From', 'To', 'kr', { type: 'string', role: 'tooltip' }],
+    ['A', 'B', 10, 'foo'],
+  ]);
+
+  /**
+   * Fetch the data from the backend.
+   */
   const fetchStream = async () => {
     // https://api.malt.no/budget/streams/2021/8
-    const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${month + 1}`;
+    const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${parseInt(month) + 1}`;
     console.log(url);
     const res = await fetch(url);
-    const data = await res.json();
+    const data: BudgetStream = await res.json();
     console.log(data);
+    const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
+    data.values.forEach((item: BudgetStreamRow) => {
+      chartData.push([item[0], item[1], item[2], `<div>kr ${item[2].toFixed(2)}</div>`]);
+    });
+    console.log(chartData);
+    setChartData(chartData);
   };
 
   React.useEffect(() => {
     console.log('use effect called:', month, year);
     fetchStream();
-  });
+  }, [month, year]);
 
-  const chartData = [
-    ['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }],
-    ['A', 'X', 5, 'A-X'],
-    ['A', 'Y', 7, 'A-Y'],
-    ['A', 'Z', 6, 'A-Z'],
-    ['B', 'X', 2, 'B-X'],
-    ['B', 'Y', 9, 'B-Y'],
-    ['B', 'Z', 4, 'B-Z'],
-    ['X', 'D', 3, 'X-D'],
-    ['Y', 'E', 1, 'Y-E'],
-    ['Z', 'F', 5, 'Z-F'],
-  ];
-
+  const period = new Date(parseInt(year), parseInt(month), 12);
   // foo
   return (
     <section id="budget-sankey-section" className={styles.graph}>
-      <div>
-        hello: {year} {month}
-      </div>
+      <Typography variant="h5" className={styles.titleh5}>
+        Money stream for {period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+      </Typography>
       <Chart
         chartType="Sankey"
         width={'100%'}
@@ -62,10 +62,6 @@ const BudgetSankey = ({ month, year }: BudgetProps) => {
             textStyle: {
               fontSize: 12,
             },
-          },
-          animation: {
-            duration: 1000,
-            easing: 'out',
           },
         }}
         data={chartData}
