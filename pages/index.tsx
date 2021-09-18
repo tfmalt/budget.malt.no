@@ -12,32 +12,34 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import packageInfo from '../package.json';
 import styles from '../styles/Home.module.scss';
 import BudgetSankey from '../lib/components/BudgetSankey/BudgetSankey';
+import type { BudgetHomeProps } from '../lib/Budget.types';
+import { NoEncryption } from '@mui/icons-material';
 
-const Home: NextPage = () => {
+const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
   const now = new Date();
+  const allMonths = 'January February March April May June July August September October November December'
+    .split(' ')
+    .map((m, i) => [m, i]);
+
+  const filterMonths = (mons: any[][], y: number) => {
+    return mons.filter((m) => {
+      if (y < now.getFullYear()) return true;
+      if (m[1] <= now.getMonth()) return true;
+      return false;
+    });
+  };
 
   const [year, setYear] = React.useState(now.getFullYear().toString());
   const [month, setMonth] = React.useState(now.getMonth().toString());
+  const [months, setMonths] = React.useState(filterMonths(allMonths, parseInt(year, 10)));
 
-  const years = [2018, 2019, 2020, 2021];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  // const years = [2018, 2019, 2020, 2021];
+  console.log('list of months:', allMonths, months);
 
   const handleYearChange = (event: SelectChangeEvent) => {
     console.log('Got year event: ', event.target.value, event);
     setYear(event.target.value);
+    setMonths(filterMonths(allMonths, parseInt(event.target.value, 10)));
   };
   const handleMonthChange = (event: SelectChangeEvent) => {
     console.log('Got month event: ', event.target.value, event);
@@ -88,9 +90,9 @@ const Home: NextPage = () => {
               onChange={handleMonthChange}
               className={styles.select}
             >
-              {months.map((m, i) => (
-                <MenuItem key={m} value={i}>
-                  {m}
+              {months.map((m) => (
+                <MenuItem key={m[0]} value={m[1]}>
+                  {m[0]}
                 </MenuItem>
               ))}
             </Select>
@@ -102,4 +104,23 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+const fetchYears = async (): Promise<number[]> => {
+  const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/years`;
+  console.log('fetching years:', url);
+  const res = await fetch(url);
+  const data = await res.json();
+
+  return data.years;
+};
+
+export async function getStaticProps(): Promise<{}> {
+  const years = await fetchYears();
+  console.log('years', years);
+  return {
+    props: {
+      years,
+    },
+  };
+}
+
+export default BudgetHome;

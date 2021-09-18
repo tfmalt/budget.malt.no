@@ -2,11 +2,11 @@ import React from 'react';
 import Chart from 'react-google-charts';
 import { Typography } from '@mui/material';
 import { linkColors, nodeColors } from '../../colors';
-import type { BudgetProps, BudgetStreamRow, BudgetStream, BudgetChartData } from './BudgetSankey.types';
+import type { BudgetSankeyProps, BudgetStreamRow, BudgetStream, BudgetChartData } from '../../Budget.types';
 
 import styles from '../../../styles/BudgetSankey.module.scss';
 
-const BudgetSankey = ({ month, year }: BudgetProps) => {
+const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
   const [chartData, setChartData] = React.useState<BudgetChartData>([
     ['From', 'To', 'kr', { type: 'string', role: 'tooltip' }],
     ['A', 'B', 10, 'foo'],
@@ -21,7 +21,6 @@ const BudgetSankey = ({ month, year }: BudgetProps) => {
     console.log(url);
     const res = await fetch(url);
     const data: BudgetStream = await res.json();
-    console.log(data);
     const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
     data.values.forEach((item: BudgetStreamRow) => {
       chartData.push([item[0], item[1], item[2], `<div>kr ${item[2].toFixed(2)}</div>`]);
@@ -30,17 +29,19 @@ const BudgetSankey = ({ month, year }: BudgetProps) => {
     setChartData(chartData);
   };
 
+  /**
+   * Fetch new data on update
+   */
   React.useEffect(() => {
     console.log('use effect called:', month, year);
     fetchStream();
   }, [month, year]);
 
   const period = new Date(parseInt(year), parseInt(month), 12);
-  // foo
   return (
     <section id="budget-sankey-section" className={styles.graph}>
       <Typography variant="h5" className={styles.titleh5}>
-        Money stream for {period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+        {period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
       </Typography>
       <Chart
         chartType="Sankey"

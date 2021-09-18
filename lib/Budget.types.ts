@@ -1,6 +1,10 @@
-export type BudgetProps = {
+export type BudgetSankeyProps = {
   month: string;
   year: string;
+};
+
+export type BudgetHomeProps = {
+  years: number[];
 };
 
 export type BudgetStreamRow = [string, string, number, string];
