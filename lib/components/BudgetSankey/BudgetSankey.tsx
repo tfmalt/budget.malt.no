@@ -23,7 +23,7 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
     const data: BudgetStream = await res.json();
     const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
     data.values.forEach((item: BudgetStreamRow) => {
-      chartData.push([item[0], item[1], item[2], `<div>kr ${item[2].toFixed(2)}</div>`]);
+      chartData.push([item[0], item[1], item[2], `<div style="white-space: nowrap;">kr ${item[2].toFixed(2)}</div>`]);
     });
     console.log(chartData);
     setChartData(chartData);
@@ -45,8 +45,9 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
       </Typography>
       <Chart
         chartType="Sankey"
-        width={'100%'}
-        height={'calc(100vh - 216px'}
+        width={'calc(100vw - 32px)'}
+        height={'calc(100vh - 288px)'}
+        style={{ minHeight: '288px' }}
         loader={<div>Loading Chart</div>}
         options={{
           sankey: {
@@ -55,7 +56,7 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
             node: {
               colors: nodeColors[800],
               width: 40,
-              label: { color: '#444', fontName: 'Roboto', fontSize: 14 },
+              label: { color: '#444', fontName: 'Roboto', fontSize: 12 },
             },
           },
           tooltip: {

@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
       </ThemeProvider>
     </React.Fragment>
   );
