@@ -19,27 +19,39 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
    * Fetch new data on update
    */
   React.useEffect(() => {
-    console.log('use effect called:', month, year);
     (async () => {
-      const token = await getAccessTokenSilently({
-        audience: 'https://api.malt.no/budget',
-        scope: 'read:streams',
-      });
+      console.log('use effect called:', month, year);
+      try {
+        const token = await getAccessTokenSilently({
+          audience: 'https://api.malt.no/budget',
+          scope: 'read:streams',
+        });
 
-      console.log('token', token);
-      // https://api.malt.no/budget/streams/2021/8
-      const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${parseInt(month) + 1}`;
-      console.log(url);
-      const res = await fetch(url);
-      const data: BudgetStream = await res.json();
-      const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
-      data.values.forEach((item: BudgetStreamRow) => {
-        chartData.push([item[0], item[1], item[2], `<div style="white-space: nowrap;">kr ${item[2].toFixed(2)}</div>`]);
-      });
-      console.log(chartData);
-      setChartData(chartData);
+        // console.log('token', token);
+        // https://api.malt.no/budget/streams/2021/8
+        const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${parseInt(month) + 1}`;
+        // console.log(url);
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data: BudgetStream = await res.json();
+        const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
+        data.values.forEach((item: BudgetStreamRow) => {
+          chartData.push([
+            item[0],
+            item[1],
+            item[2],
+            `<div style="white-space: nowrap;"><strong>${item[1]}</strong><br/>kr ${item[2].toFixed(2)}</div>`,
+          ]);
+        });
+        console.log(chartData);
+        setChartData(chartData);
+      } catch (e) {
+        console.error(e);
+      }
     })();
-  }, [month, year]);
+  }, [month, year, getAccessTokenSilently]);
 
   const period = new Date(parseInt(year), parseInt(month), 12);
   return (
@@ -52,7 +64,6 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
         width={'calc(100vw - 32px)'}
         height={'calc(100vh - 288px)'}
         style={{ minHeight: '288px' }}
-        loader={<div>Loading Chart</div>}
         options={{
           sankey: {
             iterations: 64,

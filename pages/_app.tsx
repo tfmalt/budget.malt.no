@@ -13,6 +13,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       domain={process.env.NEXT_PUBLIC_DOMAIN!}
       clientId={process.env.NEXT_PUBLIC_CLIENT_ID!}
       redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL!}
+      audience={process.env.NEXT_PUBLIC_AUDIENCE!}
+      scope={process.env.NEXT_PUBLIC_SCOPE!}
     >
       <Head>
         <title>SD60 - Money Streams</title>
