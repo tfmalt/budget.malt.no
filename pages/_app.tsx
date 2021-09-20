@@ -1,14 +1,19 @@
-import '../styles/globals.scss';
+import React from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import React from 'react';
+import { Auth0Provider } from '@auth0/auth0-react';
 import { theme } from '../styles/theme';
+import '../styles/globals.scss';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <React.Fragment>
+    <Auth0Provider
+      domain={process.env.NEXT_PUBLIC_DOMAIN!}
+      clientId={process.env.NEXT_PUBLIC_CLIENT_ID!}
+      redirectUri={process.env.NEXT_PUBLIC_REDIRECT_URL!}
+    >
       <Head>
         <title>SD60 - Money Streams</title>
         <meta name="description" content="Visualize money spent - and learn next.js" />
@@ -22,7 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
-    </React.Fragment>
+    </Auth0Provider>
   );
 }
 
