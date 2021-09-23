@@ -75,7 +75,10 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
 
   const getLoginButton = (): JSX.Element | false => {
     return (
-      <Button color="inherit" onClick={() => (isAuthenticated ? handleLogout() : loginWithRedirect())}>
+      <Button
+        color="inherit"
+        onClick={() => (isAuthenticated ? handleLogout() : loginWithRedirect({ connection: 'google-oauth2' }))}
+      >
         {isAuthenticated ? 'Logout' : 'Login'}
       </Button>
     );
