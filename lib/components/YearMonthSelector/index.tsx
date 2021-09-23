@@ -33,32 +33,30 @@ export const YearMonthSelector: React.VFC<YearMonthSelectorProps> = ({ onYearCha
 
   //        <Grid item xs sx={{ maxWidth: '288px', minWidth: '240px' }}></Grid>
   return (
-    <Grid item xs={12} sm={6}>
-      <Grid container spacing={2} direction="row" justifyContent="flex-start">
-        <Grid item xs={6} sm={3} md={2} sx={{ minWidth: '288px', maxWidth: '343px' }}>
-          <FormControl variant="standard" sx={{ width: '100%' }}>
-            <InputLabel id="budget-year-label">Year</InputLabel>
-            <Select labelId="budget-year-label" id="budget-year-select" value={year} onChange={handleYearChange}>
-              {years.map((year) => (
-                <MenuItem key={year} value={year}>
-                  {year}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} sm={3} md={2} sx={{ minWidth: '288px', maxWidth: '343px' }}>
-          <FormControl variant="standard" sx={{ width: '100%' }}>
-            <InputLabel id="budget-month-label">Month</InputLabel>
-            <Select labelId="budget-month-label" id="budget-month-select" value={month} onChange={handleMonthChange}>
-              {months.map((m) => (
-                <MenuItem key={m[0]} value={m[1]}>
-                  {m[0]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
+    <Grid container spacing={2} direction="row" justifyContent="flex-start">
+      <Grid item xs={6} sm={3} md={2} sx={{ minWidth: '288px', maxWidth: '343px' }}>
+        <FormControl variant="standard" sx={{ width: '100%' }}>
+          <InputLabel id="budget-year-label">Year</InputLabel>
+          <Select labelId="budget-year-label" id="budget-year-select" value={year} onChange={handleYearChange}>
+            {years.map((year) => (
+              <MenuItem key={year} value={year}>
+                {year}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={6} sm={3} md={2} sx={{ minWidth: '288px', maxWidth: '343px' }}>
+        <FormControl variant="standard" sx={{ width: '100%' }}>
+          <InputLabel id="budget-month-label">Month</InputLabel>
+          <Select labelId="budget-month-label" id="budget-month-select" value={month} onChange={handleMonthChange}>
+            {months.map((m) => (
+              <MenuItem key={m[0]} value={m[1]}>
+                {m[0]}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
     </Grid>
   );

@@ -17,8 +17,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 import type { BudgetHomeProps } from '../lib/Budget.types';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
-import { Divider, ListItemIcon } from '@mui/material';
+import { Box, Divider, ListItemIcon } from '@mui/material';
 import { Logout } from '@mui/icons-material';
+import { theme } from '../styles/theme';
 
 const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
   const now = new Date();
@@ -127,15 +128,8 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
           </div>
         </Toolbar>
       </AppBar>
-      <Grid
-        sx={{
-          padding: 2,
-        }}
-        container
-        spacing={3}
-        direction="column"
-      >
-        <Grid item xs={12}>
+      <Grid container spacing={3} direction="column">
+        <Grid item xs={12} margin={2}>
           <Paper
             sx={{
               padding: 0,
@@ -147,16 +141,21 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
             {isAuthenticated && <BudgetSankey month={month} year={year} />}
           </Paper>
         </Grid>
-        <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
+        <Grid item xs={12} marginLeft={2}>
+          <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
+        </Grid>
+        <Grid item xs={12} margin={0}>
+          <Box padding={2} marginTop={2} sx={{ backgroundColor: theme.palette.grey[200] }}>
+            <Typography variant="caption">budget sankey - initial version - v{packageInfo.version}</Typography>
+          </Box>
+        </Grid>
       </Grid>
-      <footer className={styles.footer}>budget sankey - initial version - v{packageInfo.version}</footer>
     </React.Fragment>
   );
 };
 
 const fetchYears = async (): Promise<number[]> => {
   const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/years`;
-  console.log('fetching years:', url);
   const res = await fetch(url);
   const data = await res.json();
 
@@ -165,7 +164,6 @@ const fetchYears = async (): Promise<number[]> => {
 
 export async function getStaticProps(): Promise<{}> {
   const years = await fetchYears();
-  console.log('years', years);
   return {
     props: {
       years,
