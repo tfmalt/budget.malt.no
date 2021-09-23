@@ -7,7 +7,7 @@ import type { BudgetSankeyProps, BudgetStreamRow, BudgetStream, BudgetChartData 
 
 import styles from '../../../styles/BudgetSankey.module.scss';
 
-const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
+export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
   const { getAccessTokenSilently } = useAuth0();
 
   const [chartData, setChartData] = React.useState<BudgetChartData>([
@@ -42,7 +42,9 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
             item[0],
             item[1],
             item[2],
-            `<div style="white-space: nowrap;"><strong>${item[1]}</strong><br/>kr ${item[2].toFixed(2)}</div>`,
+            `<div style="white-space: nowrap; padding: 8px;"><strong>${item[1]}</strong><br/>kr ${item[2].toFixed(
+              2
+            )}</div>`,
           ]);
         });
         console.log(chartData);
@@ -86,5 +88,3 @@ const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
     </section>
   );
 };
-
-export default BudgetSankey;

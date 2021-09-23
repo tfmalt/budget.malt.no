@@ -1,6 +1,13 @@
+import React from 'react';
 export type BudgetSankeyProps = {
   month: string;
   year: string;
+};
+
+export type YearMonthSelectorProps = {
+  onYearChange?: Function;
+  onMonthChange?: Function;
+  years: number[];
 };
 
 export type BudgetHomeProps = {

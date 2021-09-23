@@ -9,76 +9,39 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import packageInfo from '../package.json';
 import styles from '../styles/Home.module.scss';
-import BudgetSankey from '../lib/components/BudgetSankey/BudgetSankey';
+import { BudgetSankey } from '../lib/components/BudgetSankey/BudgetSankey';
+import { YearMonthSelector } from '../lib/components/YearMonthSelector/YearMonthSelector';
 import { useAuth0 } from '@auth0/auth0-react';
 import type { BudgetHomeProps } from '../lib/Budget.types';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import { Divider, ListItemIcon } from '@mui/material';
+import { Logout } from '@mui/icons-material';
 
 const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
   const now = new Date();
-  const allMonths = 'January February March April May June July August September October November December'
-    .split(' ')
-    .map((m, i) => [m, i]);
-
-  const filterMonths = (mons: any[][], y: number) => {
-    return mons.filter((m) => {
-      if (y < now.getFullYear()) return true;
-      if (m[1] <= now.getMonth()) return true;
-      return false;
-    });
-  };
-
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
-
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [year, setYear] = React.useState(now.getFullYear().toString());
   const [month, setMonth] = React.useState(now.getMonth().toString());
-  const [months, setMonths] = React.useState(filterMonths(allMonths, parseInt(year, 10)));
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleYearChange = (event: SelectChangeEvent) => {
-    console.log('Got year event: ', event.target.value, event);
-    setYear(event.target.value);
-    setMonths(filterMonths(allMonths, parseInt(event.target.value, 10)));
-  };
+  const handleYearChange = (y: string) => setYear(y);
+  const handleMonthChange = (m: string) => setMonth(m);
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
 
-  const handleMonthChange = (event: SelectChangeEvent) => {
-    console.log('Got month event: ', event.target.value, event);
-    console.log('inside sankey user:', user);
-    setMonth(event.target.value);
-  };
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    logout({ returnTo: process.env.NEXT_PUBLIC_REDIRECT_URL, client_id: process.env.NEXT_PUBLIC_CLIENT_ID });
-  };
-
-  const getSankey = (): JSX.Element | null => {
-    let sankey = null;
-    if (isAuthenticated) {
-      sankey = <BudgetSankey month={month} year={year} />;
-    }
-    return sankey;
+  const handleLoginOrOut = () => {
+    isAuthenticated
+      ? logout({ returnTo: process.env.NEXT_PUBLIC_REDIRECT_URL, client_id: process.env.NEXT_PUBLIC_CLIENT_ID })
+      : loginWithRedirect({ connection: 'google-oauth2' });
   };
 
   const getLoginButton = (): JSX.Element | false => {
     return (
-      <Button
-        color="inherit"
-        onClick={() => (isAuthenticated ? handleLogout() : loginWithRedirect({ connection: 'google-oauth2' }))}
-      >
+      <Button color="inherit" onClick={handleLoginOrOut}>
         {isAuthenticated ? 'Logout' : 'Login'}
       </Button>
     );
@@ -111,21 +74,56 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
               sx={{ border: '3.5px solid white' }}
             ></Avatar>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: 'visible',
+                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  mt: 1.5,
+                  '& .MuiAvatar-root': {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  '&:before': {
+                    content: '""',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: 'background.paper',
+                    transform: 'translateY(-50%) rotate(45deg)',
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem>
+                <Avatar
+                  onClick={handleMenu}
+                  color="inherit"
+                  src={typeof user === 'undefined' ? '' : user.picture}
+                  alt={typeof user === 'undefined' ? 'Unauthorized user' : user.name}
+                  sx={{ border: '3.5px solid white' }}
+                />{' '}
+                {typeof user === 'undefined' ? 'Unauthorized user' : user.name}
+              </MenuItem>
+              <Divider />
+              <MenuItem>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>
@@ -145,44 +143,12 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
               width: 'auto',
               minHeight: '320px',
             }}
-            elevation={1}
+            elevation={0}
           >
-            {getSankey()}
+            {isAuthenticated && <BudgetSankey month={month} year={year} />}
           </Paper>
         </Grid>
-        <Grid item xs>
-          <Grid container spacing={2} direction="row" justifyContent="flex-start">
-            <Grid item xs sx={{ maxWidth: '288px', minWidth: '240px' }}>
-              <FormControl variant="standard" sx={{ width: '100%' }}>
-                <InputLabel id="budget-year-label">Year</InputLabel>
-                <Select labelId="budget-year-label" id="budget-year-select" value={year} onChange={handleYearChange}>
-                  {years.map((year) => (
-                    <MenuItem key={year} value={year}>
-                      {year}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs sx={{ maxWidth: '288px', minWidth: '240px' }}>
-              <FormControl variant="standard" sx={{ width: '100%' }}>
-                <InputLabel id="budget-month-label">Month</InputLabel>
-                <Select
-                  labelId="budget-month-label"
-                  id="budget-month-select"
-                  value={month}
-                  onChange={handleMonthChange}
-                >
-                  {months.map((m) => (
-                    <MenuItem key={m[0]} value={m[1]}>
-                      {m[0]}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Grid>
+        <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
       </Grid>
       <footer className={styles.footer}>budget sankey - initial version - v{packageInfo.version}</footer>
     </React.Fragment>
