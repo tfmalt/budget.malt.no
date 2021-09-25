@@ -68,7 +68,7 @@ export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
         style={{ minHeight: '288px' }}
         options={{
           sankey: {
-            iterations: 16,
+            iterations: 256,
             link: { colors: linkColors[200], colorMode: 'gradient' },
             node: {
               colors: nodeColors[800],
