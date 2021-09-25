@@ -1,0 +1,31 @@
+{
+  "name": "Budget - Money Streams",
+  "short_name": "Budget",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2195f3",
+  "theme_color": "#2195f3",
+  "orientation": "landscape-primary",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
