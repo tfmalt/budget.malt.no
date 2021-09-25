@@ -63,7 +63,7 @@ export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
       </Typography>
       <Chart
         chartType="Sankey"
-        width={'calc(100vw - 48px)'}
+        width={'calc(100vw - 32px)'}
         height={'calc((100vw * (9/16)) - 88px)'}
         style={{ minHeight: '288px' }}
         options={{
