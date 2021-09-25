@@ -1,14 +1,15 @@
 {
   "name": "budget.malt.no",
-  "version": "21.9.2502",
+  "version": "21.9.2501",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next build && next export -o export && touch ./export/.nojekyll",
-    "deploy": "next export && gh-pages -d export"
+    "export": "yarn build && next export -o ./export",
+    "post-export": "touch ./export/.nojekyll && echo 'budget.malt.no' > ./export/CNAME",
+    "deploy": "yarn export && yarn post-export && gh-pages -t -d ./export"
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.7.0",
