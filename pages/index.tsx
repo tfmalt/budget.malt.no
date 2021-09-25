@@ -145,7 +145,7 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
           <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
         </Grid>
         <Grid item xs={12} margin={0}>
-          <Box padding={2} marginTop={2} sx={{ backgroundColor: theme.palette.grey[200] }}>
+          <Box padding={1} marginTop={2} sx={{ backgroundColor: theme.palette.grey[100] }}>
             <Typography variant="caption">budget sankey - initial version - v{packageInfo.version}</Typography>
           </Box>
         </Grid>

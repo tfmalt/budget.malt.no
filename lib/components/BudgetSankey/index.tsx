@@ -57,18 +57,18 @@ export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
 
   const period = new Date(parseInt(year), parseInt(month), 12);
   return (
-    <section id="budget-sankey-section" className={styles.graph}>
+    <div id="budget-sankey-section" className={styles.graph}>
       <Typography variant="h5" className={styles.titleh5}>
         {period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
       </Typography>
       <Chart
         chartType="Sankey"
         width={'calc(100vw - 48px)'}
-        height={'calc(100vh - 300px)'}
+        height={'calc((100vw * (9/16)) - 88px)'}
         style={{ minHeight: '288px' }}
         options={{
           sankey: {
-            iterations: 64,
+            iterations: 16,
             link: { colors: linkColors[200], colorMode: 'gradient' },
             node: {
               colors: nodeColors[800],
@@ -85,6 +85,6 @@ export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
         }}
         data={chartData}
       />
-    </section>
+    </div>
   );
 };
