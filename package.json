@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "yarn build && next export -o ./export",
-    "post-export": "touch ./export/.nojekyll && echo 'budget.malt.no' > ./export/CNAME",
-    "deploy": "yarn export && yarn post-export && gh-pages -t -d ./export"
+    "export": "npm run build && next export -o ./export",
+    "postexport": "touch ./export/.nojekyll && echo 'budget.malt.no' > ./export/CNAME",
+    "deploy": "npm run export && npm run post-export && gh-pages -t -d ./export",
+    "clean": "rm -rf ./export",
+    "realclean": "npm run clean && rm -rf .next",
+    "distclean": "npm run realclean && rm -rf node_modules"
   },
   "dependencies": {
     "@auth0/auth0-react": "^1.7.0",
@@ -28,7 +31,6 @@
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "gh-pages": "^3.2.3",
-    "next-offline": "^5.0.5",
     "prettier": "^2.4.1",
     "typescript": "4.4.3"
   }
