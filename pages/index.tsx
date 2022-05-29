@@ -156,10 +156,15 @@ const BudgetHome: NextPage<BudgetHomeProps> = ({ years }) => {
 
 const fetchYears = async (): Promise<number[]> => {
   const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/years`;
-  const res = await fetch(url);
-  const data = await res.json();
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
 
-  return data.years;
+    return data.years;
+  } catch (e) {
+    console.error('Got error fetching years:', e);
+    return [];
+  }
 };
 
 export async function getStaticProps(): Promise<{}> {
