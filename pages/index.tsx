@@ -4,12 +4,12 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import packageInfo from '../package.json';
-import { BudgetSankey } from '../lib/components/BudgetSankey';
+import { BudgetSankey } from '../lib/components/BudgetSankey/budget-sankey';
 import { BudgetAppBar } from '../lib/components/BudgetAppBar';
-import { YearMonthSelector } from '../lib/components/YearMonthSelector';
+import { YearMonthSelector } from '../lib/components/YearMonthSelector/year-month-selector';
 import { useAuth0 } from '@auth0/auth0-react';
 import type { BudgetHomeProps } from '../lib/Budget.types';
-import { Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { theme } from '../styles/theme';
 
 const BudgetHome: NextPage = () => {
@@ -35,37 +35,44 @@ const BudgetHome: NextPage = () => {
 
   React.useEffect(() => {
     fetchYears().then((y) => setYears(y));
-  });
+  }, []);
 
   const handleYearChange = (y: string) => setYear(y);
   const handleMonthChange = (m: string) => setMonth(m);
 
   return (
-    <React.Fragment>
+    <>
       <BudgetAppBar></BudgetAppBar>
-      <Grid container spacing={3} direction="column" maxWidth="lg">
-        <Grid item xs={12} margin={2}>
-          <Paper
-            sx={{
-              padding: 0,
-              width: 'auto',
-              minHeight: '320px',
-            }}
-            elevation={0}
+      <Grid container direction={'row'} position={'absolute'} height={`calc(100vh - 64px)`}>
+        <Grid item xs={12} flexGrow={20} flexBasis={'90%'}>
+          <Container maxWidth="xl">
+            <Box
+              sx={{
+                paddingTop: 2,
+                minHeight: '320px',
+              }}
+            >
+              {isAuthenticated && <BudgetSankey month={month} year={year} />}
+            </Box>
+          </Container>
+        </Grid>
+        <Grid item xs={12} flexShrink={2} sx={{ maxHeight: '96px' }}>
+          <Container maxWidth="xl">
+            <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
+          </Container>
+        </Grid>
+        <Grid item xs={12} flexShrink={3} sx={{ maxHeight: '56px' }}>
+          <Container
+            maxWidth="xl"
+            sx={{ backgroundColor: theme.palette.grey[200], borderTop: `1px solid ${theme.palette.grey[300]}` }}
           >
-            {isAuthenticated && <BudgetSankey month={month} year={year} />}
-          </Paper>
-        </Grid>
-        <Grid item xs={12} marginLeft={2}>
-          <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
-        </Grid>
-        <Grid item xs={12} margin={0}>
-          <Box padding={1} marginTop={2} sx={{ backgroundColor: theme.palette.grey[100] }}>
-            <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
-          </Box>
+            <Box sx={{ padding: '8px 0px' }}>
+              <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
+            </Box>
+          </Container>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 };
 
