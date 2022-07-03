@@ -61,11 +61,8 @@ const BudgetHome: NextPage = () => {
             <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
           </Container>
         </Grid>
-        <Grid item xs={12} flexShrink={3} sx={{ maxHeight: '56px' }}>
-          <Container
-            maxWidth="xl"
-            sx={{ backgroundColor: theme.palette.grey[200], borderTop: `1px solid ${theme.palette.grey[300]}` }}
-          >
+        <Grid item xs={12} flexShrink={3} sx={{ maxHeight: '56px', backgroundColor: theme.palette.grey[200] }}>
+          <Container maxWidth="xl" sx={{ borderTop: `1px solid ${theme.palette.grey[300]}` }}>
             <Box sx={{ padding: '16px 0px' }}>
               <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
             </Box>
