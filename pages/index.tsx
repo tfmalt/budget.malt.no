@@ -43,7 +43,7 @@ const BudgetHome: NextPage = () => {
   return (
     <>
       <BudgetAppBar></BudgetAppBar>
-      <Grid container direction={'row'} position={'absolute'} height={`calc(100vh - 64px)`}>
+      <Grid container direction={'row'} position={'absolute'} height={`calc(100vh - 64px)`} maxHeight={`865px`}>
         <Grid item xs={12} flexGrow={20} flexBasis={'90%'}>
           <Container maxWidth="xl">
             <Box
@@ -66,7 +66,7 @@ const BudgetHome: NextPage = () => {
             maxWidth="xl"
             sx={{ backgroundColor: theme.palette.grey[200], borderTop: `1px solid ${theme.palette.grey[300]}` }}
           >
-            <Box sx={{ padding: '8px 0px' }}>
+            <Box sx={{ padding: '16px 0px' }}>
               <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
             </Box>
           </Container>
