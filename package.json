@@ -1,6 +1,6 @@
 {
   "name": "budget.malt.no",
-  "version": "22.5.2902",
+  "version": "22.7.301",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -15,25 +15,26 @@
     "distclean": "npm run realclean && rm -rf node_modules"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^1.7.0",
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
-    "@mui/icons-material": "^5.0.0",
-    "@mui/material": "^5.0.0",
-    "next": "12.1.6",
-    "react": "18.1.0",
-    "react-dom": "18.1.0",
+    "@auth0/auth0-react": "^1.10.2",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.6",
+    "next": "12.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-google-charts": "^4.0.0",
-    "sass": "^1.41.1"
+    "sass": "^1.53.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.36",
-    "@types/react": "18.0.9",
-    "eslint": "8.16.0",
-    "eslint-config-next": "12.1.6",
+    "@emotion/server": "^11.4.0",
+    "@types/node": "^18.0.0",
+    "@types/react": "18.0.14",
+    "eslint": "8.19.0",
+    "eslint-config-next": "12.2.0",
     "gh-pages": "^4.0.0",
-    "prettier": "^2.4.1",
-    "typescript": "4.7.2"
+    "prettier": "^2.7.1",
+    "typescript": "4.7.4"
   },
   "volta": {
     "node": "16.15.1",
