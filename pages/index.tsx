@@ -78,7 +78,14 @@ const BudgetHome: NextPage = () => {
                 height: '100%',
               }}
             >
-              <BudgetSankey month={month} year={year} />
+              <BudgetSankey
+                month={month}
+                year={year}
+                width={`calc(100vw - 48px)`}
+                height={`calc(100vh - 265px)`}
+                maxWidth={`${theme.breakpoints.values.xl - 48}px`}
+                maxHeight={`${theme.breakpoints.values.xl * (9 / 16)}px`}
+              />
             </Box>
           </Container>
         </Grid>

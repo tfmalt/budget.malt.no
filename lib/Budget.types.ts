@@ -2,6 +2,10 @@ import React from 'react';
 export type BudgetSankeyProps = {
   month: string;
   year: string;
+  width?: string;
+  height?: string;
+  maxWidth?: string;
+  maxHeight?: string;
 };
 
 export type YearMonthSelectorProps = {

@@ -8,7 +8,7 @@ import type { BudgetSankeyProps, BudgetStreamRow, BudgetStream, BudgetChartData 
 import { theme } from '../../../styles/theme';
 import styles from './budget-sankey.module.scss';
 
-export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
+export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight }: BudgetSankeyProps) => {
   const { getAccessTokenSilently } = useAuth0();
   const isMediaLarge = useMediaQuery('(min-width:600px)');
 
@@ -64,11 +64,11 @@ export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
       <Typography variant="h5">{period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</Typography>
       <Chart
         chartType="Sankey"
-        width={`calc(100vw - 48px)`}
-        height={`calc(100vh - 265px)`}
         style={{
-          maxWidth: `${theme.breakpoints.values.xl - 48}px`,
-          maxHeight: `${theme.breakpoints.values.xl * (9 / 16)}px`,
+          width: width || 400,
+          height: height || 400,
+          maxWidth: maxWidth || '100%',
+          maxHeight: maxHeight || `calc(100vw - 128px)`,
         }}
         options={{
           sankey: {
