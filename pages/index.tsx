@@ -1,15 +1,13 @@
 import type { NextPage } from 'next';
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import packageInfo from '../package.json';
-import { BudgetSankey } from '../lib/components/BudgetSankey/budget-sankey';
+import { BudgetSankey } from '../lib/components/BudgetSankey';
 import { BudgetAppBar } from '../lib/components/BudgetAppBar';
-import { YearMonthSelector } from '../lib/components/YearMonthSelector/year-month-selector';
+import { YearMonthSelector } from '../lib/components/YearMonthSelector';
 import { useAuth0 } from '@auth0/auth0-react';
-import type { BudgetHomeProps } from '../lib/Budget.types';
-import { Box, Container } from '@mui/material';
+import { Box, Container, getTableFooterUtilityClass, useMediaQuery } from '@mui/material';
 import { theme } from '../styles/theme';
 
 const BudgetHome: NextPage = () => {
@@ -40,34 +38,60 @@ const BudgetHome: NextPage = () => {
   const handleYearChange = (y: string) => setYear(y);
   const handleMonthChange = (m: string) => setMonth(m);
 
+  const isLarge = useMediaQuery('(min-width:600px)');
+  const getFooter = () => {
+    if (isLarge) {
+      return (
+        <Grid
+          item
+          xs={12}
+          flexGrow={4}
+          flexShrink={0}
+          sx={{
+            backgroundColor: theme.palette.grey[200],
+            borderTop: `1px solid ${theme.palette.grey[300]}`,
+          }}
+        >
+          <Container maxWidth="xl">
+            <Box sx={{ padding: '16px 0px' }}>
+              <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
+            </Box>
+          </Container>
+        </Grid>
+      );
+    }
+  };
+
   return (
     <>
       <BudgetAppBar></BudgetAppBar>
-      <Grid container direction={'row'} position={'absolute'} height={`calc(100vh - 64px)`} maxHeight={`865px`}>
+      <Grid
+        container
+        direction={'row'}
+        spacing={0}
+        justifyContent={'flex-start'}
+        alignItems={'flex-start'}
+        position={'absolute'}
+        height={`calc(100vh - 64px)`}
+      >
         <Grid item xs={12} flexGrow={20} flexBasis={'90%'}>
-          <Container maxWidth="xl">
+          <Container maxWidth="xl" sx={{}}>
             <Box
               sx={{
                 paddingTop: 2,
-                minHeight: '320px',
+                height: '100%',
               }}
             >
               {isAuthenticated && <BudgetSankey month={month} year={year} />}
             </Box>
           </Container>
         </Grid>
-        <Grid item xs={12} flexShrink={2} sx={{ maxHeight: '96px' }}>
+        <Grid item xs={12} flexShrink={0}>
           <Container maxWidth="xl">
             <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
           </Container>
         </Grid>
-        <Grid item xs={12} flexShrink={3} sx={{ maxHeight: '56px', backgroundColor: theme.palette.grey[200] }}>
-          <Container maxWidth="xl" sx={{ borderTop: `1px solid ${theme.palette.grey[300]}` }}>
-            <Box sx={{ padding: '16px 0px' }}>
-              <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
-            </Box>
-          </Container>
-        </Grid>
+        {getFooter()}
       </Grid>
     </>
   );

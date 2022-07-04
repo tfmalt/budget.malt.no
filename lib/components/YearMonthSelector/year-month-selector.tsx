@@ -34,7 +34,7 @@ export const YearMonthSelector: React.VFC<YearMonthSelectorProps> = ({ onYearCha
   //        <Grid item xs sx={{ maxWidth: '288px', minWidth: '240px' }}></Grid>
   return (
     <Grid container paddingTop={3} paddingBottom={3} spacing={3} direction="row" justifyContent="flex-start">
-      <Grid item xs={6} sm={3} md={2} sx={{ minWidth: '288px', maxWidth: '343px' }}>
+      <Grid item xs={6} sm={3} md={2} sx={{ minWidth: '288px' }}>
         <FormControl variant="standard" sx={{ width: '100%' }}>
           <InputLabel id="budget-year-label">Year</InputLabel>
           <Select labelId="budget-year-label" id="budget-year-select" value={year} onChange={handleYearChange}>

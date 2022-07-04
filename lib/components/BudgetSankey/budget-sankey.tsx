@@ -1,6 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import Chart from 'react-google-charts';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import { linkColors, nodeColors } from '../../colors';
 import { useAuth0 } from '@auth0/auth0-react';
 import type { BudgetSankeyProps, BudgetStreamRow, BudgetStream, BudgetChartData } from '../../Budget.types';
@@ -10,6 +10,7 @@ import styles from './budget-sankey.module.scss';
 
 export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
   const { getAccessTokenSilently } = useAuth0();
+  const isMediaLarge = useMediaQuery('(min-width:600px)');
 
   const [chartData, setChartData] = React.useState<BudgetChartData>([
     ['From', 'To', 'kr', { type: 'string', role: 'tooltip' }],
@@ -56,18 +57,18 @@ export const BudgetSankey = ({ month, year }: BudgetSankeyProps) => {
     })();
   }, [month, year, getAccessTokenSilently]);
 
-  console.log('theme', theme);
   const period = new Date(parseInt(year), parseInt(month), 12);
+
   return (
     <Box>
       <Typography variant="h5">{period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</Typography>
       <Chart
         chartType="Sankey"
         width={`calc(100vw - 48px)`}
-        height={`calc(100vh - 266px)`}
+        height={`calc(100vh - 265px)`}
         style={{
-          minHeight: '288px',
           maxWidth: `${theme.breakpoints.values.xl - 48}px`,
+          maxHeight: `${theme.breakpoints.values.xl * (9 / 16)}px`,
         }}
         options={{
           sankey: {
