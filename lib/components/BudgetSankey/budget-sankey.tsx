@@ -8,7 +8,7 @@ import type { BudgetSankeyProps, BudgetStreamRow, BudgetStream, BudgetChartData 
 import { theme } from '../../../styles/theme';
 import styles from './budget-sankey.module.scss';
 
-export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight }: BudgetSankeyProps) => {
+export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight, update }: BudgetSankeyProps) => {
   const { getAccessTokenSilently } = useAuth0();
   const isMediaLarge = useMediaQuery('(min-width:600px)');
 
@@ -16,13 +16,15 @@ export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight }
     ['From', 'To', 'kr', { type: 'string', role: 'tooltip' }],
     ['A', 'B', 10, 'foo'],
   ]);
+  const [lastUpdate, setLastUpdated] = React.useState(new Date(0));
 
   /**
    * Fetch new data on update
    */
   React.useEffect(() => {
     (async () => {
-      console.log('use effect called:', month, year);
+      const now = new Date();
+      console.log('use effect called:', month, year, now.toJSON());
       try {
         const token = await getAccessTokenSilently({
           audience: 'https://api.malt.no/budget',
@@ -32,12 +34,14 @@ export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight }
         // console.log('token', token);
         // https://api.malt.no/budget/streams/2021/8
         const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${parseInt(month) + 1}`;
-        // console.log(url);
+        console.log(url);
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const data: BudgetStream = await res.json();
+        console.log(data);
+        setLastUpdated(new Date(data.timestamp));
         const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
         data.values.forEach((item: BudgetStreamRow) => {
           chartData.push([
@@ -55,13 +59,23 @@ export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight }
         console.error(e);
       }
     })();
-  }, [month, year, getAccessTokenSilently]);
+  }, [month, year, update, getAccessTokenSilently]);
 
   const period = new Date(parseInt(year), parseInt(month), 12);
 
   return (
     <Box>
       <Typography variant="h5">{period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</Typography>
+      <Typography variant="caption">
+        Sist oppdatert:{' '}
+        {lastUpdate.toLocaleString('no-NO', {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        })}
+      </Typography>
       <Chart
         chartType="Sankey"
         style={{

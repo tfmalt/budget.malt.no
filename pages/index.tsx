@@ -82,7 +82,7 @@ const BudgetHome: NextPage = () => {
                 month={month}
                 year={year}
                 width={`calc(100vw - 48px)`}
-                height={`calc(100vh - 265px)`}
+                height={`calc(100vh - 281px)`}
                 maxWidth={`${theme.breakpoints.values.xl - 48}px`}
                 maxHeight={`${theme.breakpoints.values.xl * (9 / 16)}px`}
               />

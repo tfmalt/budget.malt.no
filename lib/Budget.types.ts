@@ -6,6 +6,7 @@ export type BudgetSankeyProps = {
   height?: string;
   maxWidth?: string;
   maxHeight?: string;
+  update?: string;
 };
 
 export type YearMonthSelectorProps = {
