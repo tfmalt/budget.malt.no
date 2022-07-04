@@ -31,16 +31,12 @@ export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight, 
           scope: 'read:streams',
         });
 
-        // console.log('token', token);
-        // https://api.malt.no/budget/streams/2021/8
         const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${parseInt(month) + 1}`;
-        console.log(url);
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const data: BudgetStream = await res.json();
-        console.log(data);
         setLastUpdated(new Date(data.timestamp));
         const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
         data.values.forEach((item: BudgetStreamRow) => {

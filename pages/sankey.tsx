@@ -6,11 +6,11 @@ const SankeyPage = () => {
   const now = new Date();
   const [year, setYear] = React.useState(now.getFullYear().toString());
   const [month, setMonth] = React.useState(now.getMonth().toString());
-  const [update, setUpdate] = React.useState(now.toJSON());
+  const [lastUpdate, setLastUpdated] = React.useState(now.toJSON());
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setUpdate(() => new Date().toJSON());
+      setLastUpdated(() => new Date().toJSON());
     }, 3600000);
 
     return () => clearInterval(interval);
@@ -23,9 +23,9 @@ const SankeyPage = () => {
           month={month}
           year={year}
           width={`100vw`}
-          maxHeight={`calc(100vh - 80px)`}
-          height={`calc(100vh - 80px)`}
-          update={update}
+          maxHeight={`calc(100vh - 100px)`}
+          height={`calc(100vh - 100px)`}
+          update={lastUpdate}
         />
       </Box>
     </Container>
