@@ -29,7 +29,7 @@ export const BudgetAppBar = () => {
   const getLoginButton = (): JSX.Element | false => {
     return (
       <Button color="inherit" onClick={handleLoginOrOut}>
-        {isAuthenticated ? 'Logout' : 'Login'}
+        {isAuthenticated ? 'Log out' : 'Log in'}
       </Button>
     );
   };

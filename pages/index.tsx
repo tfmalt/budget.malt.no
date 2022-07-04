@@ -7,12 +7,12 @@ import { BudgetSankey } from '../lib/components/BudgetSankey';
 import { BudgetAppBar } from '../lib/components/BudgetAppBar';
 import { YearMonthSelector } from '../lib/components/YearMonthSelector';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Box, Container, getTableFooterUtilityClass, useMediaQuery } from '@mui/material';
+import { Box, Button, Container, getTableFooterUtilityClass, useMediaQuery } from '@mui/material';
 import { theme } from '../styles/theme';
 
 const BudgetHome: NextPage = () => {
   const now = new Date();
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
   const [year, setYear] = React.useState(now.getFullYear().toString());
   const [month, setMonth] = React.useState(now.getMonth().toString());
   const [years, setYears] = React.useState([]);
@@ -42,12 +42,8 @@ const BudgetHome: NextPage = () => {
   const getFooter = () => {
     if (isLarge) {
       return (
-        <Grid
-          item
-          xs={12}
-          flexGrow={4}
-          flexShrink={0}
-          sx={{
+        <footer
+          style={{
             backgroundColor: theme.palette.grey[200],
             borderTop: `1px solid ${theme.palette.grey[300]}`,
           }}
@@ -57,24 +53,24 @@ const BudgetHome: NextPage = () => {
               <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
             </Box>
           </Container>
-        </Grid>
+        </footer>
       );
     }
   };
 
-  return (
-    <>
-      <BudgetAppBar></BudgetAppBar>
+  const getBudgetSankey = () => {
+    return (
       <Grid
         container
         direction={'row'}
         spacing={0}
-        justifyContent={'flex-start'}
-        alignItems={'flex-start'}
-        position={'absolute'}
-        height={`calc(100vh - 64px)`}
+        sx={{
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          height: `calc(100vh - 121px)`,
+        }}
       >
-        <Grid item xs={12} flexGrow={20} flexBasis={'90%'}>
+        <Grid item xs={12} flexGrow={20}>
           <Container maxWidth="xl" sx={{}}>
             <Box
               sx={{
@@ -82,17 +78,47 @@ const BudgetHome: NextPage = () => {
                 height: '100%',
               }}
             >
-              {isAuthenticated && <BudgetSankey month={month} year={year} />}
+              <BudgetSankey month={month} year={year} />
             </Box>
           </Container>
         </Grid>
-        <Grid item xs={12} flexShrink={0}>
+        <Grid item xs={12} flexShrink={1}>
           <Container maxWidth="xl">
             <YearMonthSelector years={years} onYearChange={handleYearChange} onMonthChange={handleMonthChange} />
           </Container>
         </Grid>
-        {getFooter()}
       </Grid>
+    );
+  };
+
+  const handleLogin = () => {
+    loginWithRedirect({ connection: 'google-oauth2' });
+  };
+
+  const getLoginButton = () => {
+    return (
+      <Grid container sx={{ justifyContent: 'center', alignItems: 'center', height: `calc(100vh - 121px)` }}>
+        <Grid item sx={{ padding: 2 }}>
+          <Button
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              background: `linear-gradient(90deg, ${theme.palette.primary.main} 20%, #4db6ac 80%)`,
+            }}
+            variant="contained"
+            onClick={handleLogin}
+          >
+            Sign in with Google
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  return (
+    <>
+      <BudgetAppBar></BudgetAppBar>
+      {isAuthenticated ? getBudgetSankey() : getLoginButton()}
+      {getFooter()}
     </>
   );
 };
