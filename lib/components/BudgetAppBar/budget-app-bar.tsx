@@ -16,6 +16,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Logout } from '@mui/icons-material';
 import { useAuth0 } from '@auth0/auth0-react';
+import { theme } from '../../../styles/theme';
 
 export const BudgetAppBar = () => {
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
@@ -39,7 +40,14 @@ export const BudgetAppBar = () => {
   const handleClose = () => setAnchorEl(null);
 
   return (
-    <AppBar elevation={1} position="static">
+    <AppBar
+      elevation={1}
+      position="static"
+      sx={{
+        backgroundColor: theme.palette.primary.main,
+        background: `linear-gradient(90deg, ${theme.palette.primary.main} 20%, #4db6ac 80%)`,
+      }}
+    >
       <Container maxWidth="xl" disableGutters>
         <Toolbar>
           <IconButton edge="start" size="large" color="inherit" aria-label="menu" sx={{ mr: 2, paddingLeft: '16px' }}>
