@@ -1,6 +1,6 @@
 {
   "name": "budget.malt.no",
-  "version": "22.7.410",
+  "version": "22.7.1001",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3002",
