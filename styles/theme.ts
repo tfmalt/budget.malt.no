@@ -21,6 +21,8 @@ export const theme = createTheme({
     },
     h2: {
       fontFamily: 'Roboto Slab',
+      fontSize: 'clamp(1.8rem, 5vw, 2.4rem)',
+      fontWeight: '400',
     },
     h3: {
       fontFamily: 'Roboto Slab',
