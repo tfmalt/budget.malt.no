@@ -45,7 +45,7 @@ export const BudgetAppBar = () => {
       position="static"
       sx={{
         backgroundColor: theme.palette.primary.main,
-        background: `linear-gradient(90deg, ${theme.palette.primary.main} 20%, #4db6ac 80%)`,
+        background: `linear-gradient(90deg, ${theme.palette.primary.main} 20%, #4db6ac 100%)`,
       }}
     >
       <Container maxWidth="xl" disableGutters>
