@@ -7,7 +7,7 @@ import { BudgetSankey } from '../lib/components/BudgetSankey';
 import { BudgetAppBar } from '../lib/components/BudgetAppBar';
 import { YearMonthSelector } from '../lib/components/YearMonthSelector';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Box, Button, Container, getTableFooterUtilityClass, useMediaQuery } from '@mui/material';
+import { Box, Button, Container, useMediaQuery } from '@mui/material';
 import { theme } from '../styles/theme';
 
 const BudgetHome: NextPage = () => {
@@ -16,6 +16,7 @@ const BudgetHome: NextPage = () => {
   const [year, setYear] = React.useState(now.getFullYear().toString());
   const [month, setMonth] = React.useState(now.getMonth().toString());
   const [years, setYears] = React.useState([]);
+  const [apiVersion, setApiVersion] = React.useState('');
 
   const fetchYears = async () => {
     const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/years`;
@@ -24,6 +25,7 @@ const BudgetHome: NextPage = () => {
       const data = await res.json();
 
       console.log('years data:', data);
+      setApiVersion(data.version);
       return data.years;
     } catch (e) {
       console.error('Got error fetching years:', e);
@@ -44,13 +46,15 @@ const BudgetHome: NextPage = () => {
       return (
         <footer
           style={{
-            backgroundColor: theme.palette.grey[200],
-            borderTop: `1px solid ${theme.palette.grey[300]}`,
+            backgroundColor: '#ffffff',
+            color: '#bbbbbb',
           }}
         >
           <Container maxWidth="xl">
-            <Box sx={{ padding: '16px 0px' }}>
-              <Typography variant="caption">budget sankey - v{packageInfo.version}</Typography>
+            <Box sx={{ padding: '16px 0px', textAlign: 'right' }}>
+              <Typography variant="caption">
+                budget sankey - app: v{packageInfo.version} - api: v{apiVersion}
+              </Typography>
             </Box>
           </Container>
         </footer>
@@ -109,9 +113,10 @@ const BudgetHome: NextPage = () => {
           <Button
             sx={{
               backgroundColor: theme.palette.primary.main,
-              background: `linear-gradient(90deg, ${theme.palette.primary.main} 20%, #4db6ac 80%)`,
+              background: `linear-gradient(90deg, ${theme.palette.primary.main} 20%, #4db6ac 100%)`,
             }}
             variant="contained"
+            size="large"
             onClick={handleLogin}
           >
             Sign in with Google
