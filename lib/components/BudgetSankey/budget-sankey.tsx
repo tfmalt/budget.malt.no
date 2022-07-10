@@ -31,12 +31,17 @@ export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight, 
           scope: 'read:streams',
         });
 
-        const url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}/${parseInt(month) + 1}`;
+        let url = `${process.env.NEXT_PUBLIC_API_HOST}/budget/streams/${year}${
+          parseInt(month) < 99 ? `/${parseInt(month) + 1}` : ''
+        }`;
+
+        console.log('fetching url:', url);
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const data: BudgetStream = await res.json();
+        console.log('got data:', data);
         setLastUpdated(new Date(data.timestamp));
         const chartData: BudgetChartData = [['From', 'To', 'Kr ', { type: 'string', role: 'tooltip' }]];
         data.values.forEach((item: BudgetStreamRow) => {
@@ -61,7 +66,11 @@ export const BudgetSankey = ({ month, year, width, height, maxWidth, maxHeight, 
 
   return (
     <Box>
-      <Typography variant="h5">{period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</Typography>
+      <Typography variant="h2">
+        {parseInt(month) < 99
+          ? period.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+          : `All of ${year}`}
+      </Typography>
       <Typography variant="caption">
         Sist oppdatert:{' '}
         {lastUpdate.toLocaleString('no-NO', {
